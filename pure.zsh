@@ -188,7 +188,11 @@ prompt_pure_preprompt_render() {
 
 	if [[ $1 == precmd ]]; then
 		# Initial newline, for spaciousness.
-		print
+		if [[ $prompt_pure_state[init] = true ]]; then
+			prompt_pure_state[init]=false
+		else
+			print
+		fi
 	elif [[ $prompt_pure_last_prompt != $expanded_prompt ]]; then
 		# Redraw the prompt.
 		prompt_pure_reset_prompt
@@ -720,6 +724,7 @@ prompt_pure_state_setup() {
 		username "$username"
 		prompt	 "${PURE_PROMPT_SYMBOL:-❯}"
 	)
+	prompt_pure_state[init]=true
 }
 
 # Return true if executing inside a Docker, LXC or systemd-nspawn container.
